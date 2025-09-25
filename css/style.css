@@ -1,0 +1,906 @@
+/* Box sizing */
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+/* Body */
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  background: linear-gradient(135deg, #1141dfb0 0%, #0d000ea6 48%, #8b1313bb 100%);
+  background-size: cover;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+/* Player container */
+.player {
+  max-width: 750px;
+  position: relative;
+  font-size: 0;
+  overflow: hidden;
+  /* Optional styles commented out:
+  border: 5px solid rgba(0,0,0,0.2);
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  */
+}
+
+/* Fullscreen styles */
+.player:fullscreen,
+.player:-webkit-full-screen {
+  max-width: none;
+  width: 100%;
+  border: 5px solid rgba(0,0,0,0.2);
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+}
+
+.player:fullscreen .player__controls,
+.player:-webkit-full-screen .player__controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  transform: translateY(0);
+}
+
+.player:fullscreen video,
+.player:-webkit-full-screen video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 1;
+  position: relative;
+}
+
+/* Video */
+.player__video {
+  width: 100%;
+}
+
+/* Buttons & Icons */
+.player__button,
+.material-symbols-outlined {
+  background: none;
+  border: 0;
+  line-height: 1;
+  color: white;
+  text-align: center;
+  outline: 0;
+  padding: 0;
+  cursor: pointer;
+  user-select: none;
+  font-size: 24px;
+  transition: color 0.3s ease;
+}
+
+.player__button:focus {
+  border-color: #ffc600;
+}
+
+.player__button.fullscreen,
+.skip {
+  margin-left: auto;
+}
+
+.material-symbols-outlined.player__button:hover,
+.material-symbols-outlined.player__button:focus {
+  color: #79aaff;
+  outline: none;
+  cursor: pointer;
+}
+
+/* Controls */
+.player__controls {
+  display: flex;
+  flex-direction: column;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 5px;
+  transition: opacity 0.3s ease;
+}
+
+/* .player__controls {
+  position: absolute; /* or fixed/relative depending on layout *
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10; /* higher than the video *
+  background-color: rgba(0, 0, 0, 0.4); /* semi-transparent black *
+} */
+
+
+.player__controls.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+/*
+.controls-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.controls-left,
+.controls-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+} */
+
+
+
+/* Progress bar */
+.progress {
+  position: relative;
+  height: 5px;
+  background: #555;
+  cursor: pointer;
+  transition: height 0.3s ease;
+}
+
+.player:hover .progress {
+  height: 10px;
+}
+
+.progress__filled {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: rgba(83, 178, 233, 0.82);
+  width: 0;
+  transition: width 0.1s;
+}
+
+.progress__thumb {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fdfeff;
+  box-shadow: 0 0 5px rgba(1, 0, 2, 0.79);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: left 0.1s;
+  z-index: 5;
+}
+
+/* Time display */
+.time-display {
+  min-width: 80px;
+  text-align: center;
+  color: white;
+  font-family: monospace;
+  font-size: 14px;
+}
+
+/* Sliders */
+/* .player__slider {
+  max-width: 120px;
+  width: 10px;
+  height: 20px;
+} */
+
+/* Volume panel */
+/* .volume-panel {
+  overflow: hidden;
+  width: 0;
+  transition: width 0.3s ease;
+} */
+
+.volume-panel:not(.hidden) {
+  display: block;
+  width: 80px;
+}
+
+.volume-panel.hidden {
+  display: none;
+}
+
+.volume-toggle {
+  cursor: pointer;
+}
+
+.controls-left:hover .volume-panel {
+  width: 80px;
+}
+
+.volume-slider {
+  width: 100%;
+  cursor: pointer;
+}
+
+/* Input range styling */
+input[type=range] {
+  -webkit-appearance: none;
+  background: transparent;
+  width: 100%;
+  margin: 0 5px;
+}
+
+input[type=range]:focus {
+  outline: none;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  background: rgba(255,255,255,0.8);
+  border-radius: 1.3px;
+  border: 0.2px solid transparent;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  background: #ffc600;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -3.5px;
+  box-shadow: 0 0 2px rgba(0,0,0,0.2);
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #bada55;
+}
+
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  background: #ffffff;
+  border-radius: 1.3px;
+  border: 0.2px solid transparent;
+}
+
+input[type=range]::-moz-range-thumb {
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  background: #ffc600;
+  cursor: pointer;
+  box-shadow: none;
+}
+
+/* Volume slider width override */
+input[name="volume"] {
+  width: 75px;
+}
+
+/* Settings panel */
+.settings-panel {
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  position: absolute;
+  bottom: 70px;
+  right: 20px;
+  padding: 8px 12px;
+  max-width: 200px;
+  border-radius: 5px;
+  z-index: 10;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.settings-panel label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  white-space: nowrap;
+}
+
+.settings-panel input[type="range"] {
+  width: 150px;
+}
+
+.settings-panel.hidden {
+  display: none;
+}
+
+.settings-panel:not(.hidden) {
+  display: block;
+}
+
+.setting-slider {
+  width: 65px !important;
+}
+/* Settings panel container */
+.settings-panel {
+  background-color: rgba(0, 0, 0, 0.9);
+  border-radius: 6px;
+  padding: 10px 12px;
+  color: #bac6d3;
+  font-size: 0.9rem;
+  user-select: none;
+  max-width: 320px;
+  font-family: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Headings and labels inside settings */
+.settings-panel label,
+.settings-panel h3 {
+  color: #bac6d3;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 1px;
+  display: block;
+}
+
+/* Playback rate display text */
+.playback-rate-display {
+  font-size: 14px !important;
+  color: #bac6d3;
+  font-weight: 500;
+  cursor: pointer;
+  margin-left: 6px;
+}
+
+/* Playback rate popup */
+.playback-rate-popup {
+  background-color: rgba(0, 0, 0, 0.85);
+  border-radius: 6px;
+  padding: 10px;
+  color: #bec9d4;
+  font-size: 0.85rem;
+  margin-top: 6px;
+}
+
+/* Playback rate presets buttons */
+.playback-rate-presets button {
+  font-size: 0.7rem !important;
+  padding: 5px 10px !important;
+  margin: 3px 6px 3px 0;
+  cursor: pointer;
+  border-radius: 4px;
+  border: 1px solid #bec2c7;
+  background-color: transparent;
+  color: #bec9d4;
+  transition: background-color 0.2s ease;
+}
+
+.playback-rate-presets button:hover,
+.playback-rate-presets button.active {
+  background-color: rgba(10, 127, 255, 0.1);
+  border-color: white;
+  color: white;
+}
+
+/* Sliders (range inputs) */
+.setting-slider {
+  width: 100%;
+  margin: 6px 0 12px 0;
+  accent-color: #e7e9eb;
+}
+
+/* Select dropdown for quality */
+.quality-select {
+  background-color: transparent;
+  color: #bec9d4;
+  border: 1px solid #bec2c7;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  margin-top: 6px;
+  width: 39.5%;
+  box-sizing: border-box;
+}
+
+/* Switch labels */
+.switch.theme-toggle-label,
+.switch.chapter-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #bac6d3;
+  margin-top: 5px;
+}
+
+
+
+/*Light themes*/
+.player.light-theme {
+  background: #f9f9f9;
+  color: #222;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  filter: none;
+  text-shadow: none;
+}
+ 
+.player.light-theme .player__controls {
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 0 0 8px 8px;
+  color: #333;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* .player.light-theme .player__button,
+.player.light-theme .material-symbols-outlined {
+  color: #444;
+  filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.8));
+  transition: color 0.3s ease;
+} */
+
+.player.light-theme .player__button,
+.player.light-theme .material-symbols-outlined {
+  color: #444;
+  /* filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.8)); */
+  transition: color 0.3s ease;
+}
+
+
+.player.light-theme .player__button:hover,
+.player.light-theme .material-symbols-outlined:hover {
+  color: #0078d7;
+}
+
+.player.light-theme .progress {
+  background: #ddd;
+  border-radius: 4px;
+} */
+
+.player.light-theme .progress__filled {
+  background: #0078d7;
+  border-radius: 4px;
+}
+
+.player.light-theme .progress__thumb {
+  background: #0078d7;
+  box-shadow: 0 0 6px rgba(0, 120, 215, 0.7);
+}
+
+.player.light-theme .time-display {
+  color: #555;
+  font-weight: 600;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.player.light-theme input[type=range]::-webkit-slider-runnable-track {
+  background: #ccc;
+  border-radius: 6px;
+}
+
+.player.light-theme input[type=range]::-webkit-slider-thumb {
+  background: #0078d7;
+  box-shadow: 0 0 5px rgba(0, 120, 215, 0.8);
+}
+
+.player.light-theme input[type=range]::-moz-range-track {
+  background: #ccc;
+  border-radius: 6px;
+}
+
+.player.light-theme input[type=range]::-moz-range-thumb {
+  background: #0078d7;
+  box-shadow: 0 0 5px rgba(0, 120, 215, 0.8);
+}
+
+
+/* Switch slider style (assuming you have it) */
+.switch .slider {
+  background-color: #555;
+}
+
+/* Buttons inside settings panel (except loop toggle) */
+.settings-panel button.player__button {
+  font-size: 0.7rem !important;
+  padding: 5px 10px !important;
+  margin: 3px 6px 3px 0;
+  cursor: pointer;
+  border-radius: 4px;
+  border: 1px solid #bec2c7;
+  background-color: transparent;
+  color: #bec9d4;
+  transition: background-color 0.2s ease;
+}
+
+.settings-panel button.player__button:hover {
+  background-color: rgba(10, 127, 255, 0.1);
+}
+
+.playback-rate-display {
+  min-width: 35px;
+  text-align: right;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  color: white;
+  outline: none;
+  margin-left: 5px;
+}
+
+/* Playback rate presets */
+.playback-rate-presets {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+}
+
+.playback-rate-presets button {
+  background: #222;
+  border: none;
+  color: white;
+  padding: 5px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.playback-rate-presets button:hover,
+.playback-rate-presets button.active {
+  background: #0077ff;
+}
+
+/* Playback rate popup */
+.playback-rate-popup {
+  position: absolute;
+  background: rgba(0,0,0,0.9);
+  padding: 10px;
+  border-radius: 6px;
+  margin-top: 8px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.7);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1000;
+  user-select: none;
+}
+
+.playback-rate-popup.hidden {
+  display: none;
+}
+
+/* Quality select */
+.quality-select {
+  margin-left: 8px;
+  padding: 3px 6px;
+  border-radius: 3px;
+  border: none;
+  font-size: 14px;
+  background: #222;
+  color: white;
+}
+
+/* Loop panel */
+.loop-panel {
+  position: absolute;
+  bottom: 60px;
+  right: 20px;
+  background: rgba(30, 30, 30, 0.95);
+  color: white;
+  border-radius: 10px;
+  padding: 15px 20px;
+  width: 240px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.7);
+  z-index: 999;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.loop-panel.hidden {
+  display: none;
+}
+
+.loop-panel h3 {
+  margin: 0 0 10px 0;
+  font-weight: 500;
+  text-align: center;
+}
+
+.loop-panel button.player__button {
+  font-size: 14px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: white;
+  transition: color 0.3s ease;
+  padding: 6px 12px;
+  border-radius: 4px;
+}
+
+.loop-panel button.player__button:hover {
+  color: #1e90ff;
+}
+
+
+/* Shrink the icon inside the button */
+#open-loop-panel .material-symbols-outlined {
+  font-size: 16px !important;
+  line-height: 1;
+}
+
+/* Loop panel container inside settings */
+#loop-panel {
+  padding: 10px;
+  margin-top: 10px;
+  background-color: rgba(0, 0, 0, 0.9);
+  border-radius: 6px;
+  max-width: 180px;
+  font-size: 0.9rem;
+  color: #bac6d3;
+  user-select: none;
+}
+
+/* Loop panel heading */
+#loop-panel h3 {
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  margin-bottom: 6px;
+}
+
+/* Buttons inside loop panel */
+#loop-panel button {
+  font-size: 0.7rem !important;
+  padding: 5px 10px !important;
+  margin: 3px 6px 3px 0;
+  cursor: pointer;
+  border-radius: 4px;
+  border: 1px solid #bec2c7;
+  background-color: transparent;
+  color: #bec9d4;
+  transition: background-color 0.2s ease;
+}
+
+#loop-panel button:hover {
+  background-color: rgba(10, 127, 255, 0.1);
+}
+
+/* Loop time text */
+#loop-panel span {
+  font-weight: 600;
+  margin-left: 4px;
+  color: #c0c7cf;
+}
+
+
+/* Optional: smaller buttons in loop controls */
+.loop-buttons button {
+  font-size: 0.85rem;
+  padding: 5px 10px;
+}
+
+/* Theme toggles */
+label.theme-toggle-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 144px;
+  gap: 8px; /* some space between text and slider */
+
+}
+
+label.theme-toggle-label input[type="checkbox"] {
+  margin-left: auto;
+}
+
+.switch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+    margin-left: auto;  /* push the slider to right */
+
+}
+
+
+label.theme-toggle-label,
+label.chapter-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+label.theme-toggle-label .switch,
+label.chapter-toggle-label .switch {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+/* Hide default checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Slider */
+.slider {
+  position: relative;
+  width: 30px;
+  height: 10px;
+  background-color: #ccc;
+  border-radius: 20px;
+  transition: background-color 0.3s;
+  flex-shrink: 0;
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+  height: 6px;
+  width: 6px;
+  left: 2px;
+  top: 2px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+
+/* Checked state */
+.switch input:checked + .slider {
+  background-color: #0077ff;
+}
+
+.switch input:checked + .slider::before {
+  transform: translateX(20px);
+}
+
+/* Chapter markers */
+.chapter-marker {
+  position: absolute;
+  margin-bottom: 6px;
+  width: 12px;
+  height: 12px;
+  background: red;
+  border: 2px solid white;
+  border-radius: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  z-index: 3;
+}
+
+.chapter-marker::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  font-size: 12px;
+  padding: 2px 5px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.chapter-marker:hover::after {
+  opacity: 1;
+}
+
+.chapter-marker.active {
+  background: rgb(0, 255, 128);
+  border: 2px solid white;
+}
+
+.controls-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 0 8px;
+}
+
+/* Left and right controls */
+.controls-left,
+.controls-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Make sliders small and consistent */
+.player__slider {
+  width: 75px; /* fixed width for sliders */
+  height: 20px;
+  cursor: pointer;
+  -webkit-appearance: none;
+  background: transparent;
+  margin: 0 4px;
+}
+
+/* Volume panel */
+.volume-panel {
+  width: 0;
+  overflow: hidden;
+  transition: width 0.3s ease;
+}
+
+.controls-left:hover .volume-panel {
+  width: 80px;
+  display: block;
+}
+
+/* .loop-button-container {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-top: 0px;
+  padding: 0;
+} */
+
+/* #open-loop-panel {
+  font-size: 14px;
+  background: transparent;
+  border: none;
+  color: #bec9d4;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 61px;
+  padding: 0 px;
+  justify-content: flex-end; /* align items to the right 
+  max-width: 180px; /* optional max width 
+    white-space: nowrap; /* prevent line breaks inside 
+
+} */
+/* Keep progress bar visible & interactive when controls hide */
+
+.thumbnail-preview {
+  position: absolute;
+  bottom: 30px; /* float above the bar */
+  width: 160px; /* width of one frame */
+  height: 90px;  /* height of one frame */
+  /* background-image removed */ /* adjust path if needed */
+  background-repeat: no-repeat;
+  border: 2px solid white;
+  box-shadow: 0 0 5px black;
+  display: none;
+  pointer-events: none; /* avoid blocking mouse */
+}
+
+/* ------- hide bar buttons ------*/
+
+/* .extra-controls {
+  display: flex;
+  gap: 8px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.controls-right:hover .extra-controls {
+  opacity: 1;
+  pointer-events: auto;
+} */

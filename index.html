@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Document</title>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="player">
+    <video class="player__video viewer" src="sample.mp4"></video>
+
+    <!-- Loop Panel inside settings panel -->
+    <div id="loop-panel" class="loop-panel hidden">
+      <h3>Loop Controls</h3>
+      <div>
+        <button
+          id="set-loop-start"
+          class="player__button material-symbols-outlined"
+          title="Set loop start"
+        >
+          Loop Start
+        </button>
+        <span id="loop-start-time">0:00</span>
+      </div>
+      <div>
+        <button
+          id="set-loop-end"
+          class="player__button material-symbols-outlined"
+          title="Set loop end"
+        >
+          Loop End
+        </button>
+        <span id="loop-end-time">0:00</span>
+      </div>
+      <div>
+        <button
+          id="toggle-loop"
+          class="player__button material-symbols-outlined"
+          title="Toggle loop"
+        >
+          Start
+        </button>
+        <button
+          id="clear-loop"
+          class="player__button material-symbols-outlined"
+          title="Clear loop"
+        >
+          Reset
+        </button>
+      </div>
+      <button
+        id="close-loop-panel"
+        class="player__button material-symbols-outlined"
+        title="Close loop panel"
+      >
+        Close
+      </button>
+    </div>
+
+    <div class="player__controls">
+      <!-- Progress Bar -->
+      <div class="progress">
+        <div class="thumbnail-preview" id="thumbPreview"></div>
+        <div class="progress__filled"></div>
+        <div class="progress__thumb"></div>
+      </div>
+
+      <!-- Controls Row -->
+      <div class="controls-bar">
+        <div class="controls-left">
+          <!-- Play button -->
+          <span
+            class="material-symbols-outlined player__button toggle"
+            title="Toggle Play"
+            role="button"
+            tabindex="0"
+            >play_circle</span
+          >
+
+          <!-- Volume -->
+          <span
+            class="material-symbols-outlined player__button volume-toggle"
+            title="Mute/Unmute"
+            role="button"
+            tabindex="0"
+            >volume_up</span
+          >
+          <div class="volume-panel hidden">
+            <input
+              type="range"
+              name="volume"
+              class="player__slider volume-slider"
+              min="0"
+              max="1"
+              step="0.05"
+              value="1"
+            />
+          </div>
+
+          <!-- Time -->
+          <span class="time-display">0:00 / 0:00</span>
+        </div>
+
+        <div class="controls-right">
+          <!-- <div class="extra-controls"> -->
+
+          <span
+            data-skip="-10"
+            class="material-symbols-outlined player__button skip"
+            role="button"
+            tabindex="0"
+            >replay_10</span
+          >
+          <span
+            data-skip="10"
+            class="material-symbols-outlined player__button skip"
+            role="button"
+            tabindex="0"
+            >forward_10</span
+          >
+          <span
+            id="prev-chapter"
+            class="material-symbols-outlined player__button"
+            title="Previous Chapter"
+            role="button"
+            tabindex="0"
+            aria-label="Previous Chapter"
+            >skip_previous</span
+          >
+          <span
+            id="next-chapter"
+            class="material-symbols-outlined player__button"
+            title="Next Chapter"
+            role="button"
+            tabindex="0"
+            aria-label="Next Chapter"
+            >skip_next</span
+          >
+
+          <!-- Loop toggle -->
+          <span
+            id="open-loop-panel"
+            class="material-symbols-outlined loop-button-icon player__button toggle-loop"
+            role="button"
+            tabindex="0"
+            title="Toggle Loop Panel"
+            >repeat</span
+          >
+        <!-- </div> -->
+          <span
+            class="material-symbols-outlined player__button settings-toggle"
+            role="button"
+            tabindex="0"
+            title="Open Settings"
+            >settings_applications</span
+          >
+          <span
+            class="material-symbols-outlined player__button fullscreen"
+            role="button"
+            tabindex="0"
+            title="Toggle Fullscreen"
+            >fullscreen</span
+          >
+        </div>
+      </div>
+
+      <!-- Settings Panel -->
+      <div class="settings-panel hidden" aria-hidden="true">
+        <label>
+          Playback Speed:
+          <span
+            class="playback-rate-display playback-rate-open-btn"
+            tabindex="0"
+            title="Click to change playback speed"
+            role="button"
+            >1.0x</span
+          >
+        </label>
+
+        <div
+          class="playback-rate-popup hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="playbackRateLabel"
+        >
+          <label id="playbackRateLabel" for="playbackRateSlider">Playback Speed:</label>
+          <input
+            type="range"
+            id="playbackRateSlider"
+            name="playbackRate"
+            class="player__slider setting-slider"
+            min="0.5"
+            max="2"
+            step="0.1"
+            value="1"
+          />
+
+          <div class="playback-rate-presets">
+            <button data-rate="0.5">0.5x</button>
+            <button data-rate="1">1x</button>
+            <button data-rate="1.5">1.5x</button>
+            <button data-rate="2">2x</button>
+          </div>
+        </div>
+
+        <div class="video-container"></div>
+
+        <label for="quality-select">
+          Video Quality:
+          <select id="quality-select" class="quality-select">
+            <option value="1080p" selected>1080p</option>
+            <option value="720p">720p</option>
+            <option value="480p">480p</option>
+          </select>
+        </label>
+
+        <div class="settings-controls-row">
+          <label class="switch theme-toggle-label">
+            Light Theme:
+            <input type="checkbox" class="theme-toggle" />
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <label class="switch chapter-toggle-label">
+          Show Chapters:
+          <input type="checkbox" class="chapter-toggle" checked />
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
