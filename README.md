@@ -13,10 +13,10 @@ It currently includes features such as chapters, loop controls, playback speed a
 ## 🔧 Features
 - Play/Pause, skip forward/backward
 - Adjustable volume with mute toggle (Muting will remember your last volume settings when unmuting)
-- Loop controls (set start/end and repeat)
+- Loop controls (Set start/end and repeat)
 - Chapter markers with navigation (Icon indication of the active chapter)
 - Playback speed adjustment (slider + presets)
-- Thumbnail preview area (optional sprite support)
+- Thumbnail preview area (Requires sprite)
 - Light/Dark theme toggle
 - Fullscreen mode
 
@@ -32,4 +32,3 @@ It currently includes features such as chapters, loop controls, playback speed a
 3. Customize `style.css` or `main.js` to expand functionality.
 
 ---
-Made for learning and demonstration purposes.
